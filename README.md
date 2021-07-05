@@ -101,3 +101,7 @@ yarn build
 注意：ビルド後にWebブラウザでアクセスしたときは、スーパーリロードしてブラウザキャッシュを消してください。
 そうしないとおそらくビルドしても更新が反映されません。
 
+## Herokuにデプロイする
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+Heroku上にデプロイする場合はこちらのボタンからデプロイしてください。
