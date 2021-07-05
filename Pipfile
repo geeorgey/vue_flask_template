@@ -13,6 +13,7 @@ sqlalchemy-utils = "*"
 python-dotenv = "*"
 flask-restful = "*"
 psycopg2 = "*"
+gunicorn = "*"
 
 [dev-packages]
 
