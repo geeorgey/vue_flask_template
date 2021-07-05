@@ -105,3 +105,27 @@ yarn build
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 Heroku上にデプロイする場合はこちらのボタンからデプロイしてください。
+
+## Herokuに環境変数を設定する
+
+### Heroku postgresをインストールする
+Heroku管理画面のResourcesタブを開き、Add-ons部分からHeroku Postgresを選択。
+FreeプランでOKです。
+
+### 環境変数を設定する
+Settingsタブを開き、Reveal Config Varsボタンをクリック。
+環境変数欄にすでにDATABASE_URL が入っているのがわかると思います。
+その下に４つ追加します。
+Key　｜　Value
+ENV　｜　development
+FLASK_APP　｜　backend
+FLASK_DEBUG　｜　1
+VUE_APP_BASE_API　｜　ここには、右上にあるOpen App ボタンを押して開いたURLを入れてください。
+
+## 現時点で実装してある機能
+ログイン画面でメールアドレスとパスワードを入力してログインすることが可能です。
+ログイン画面でメールアドレスとパスワードを入力してRegisterボタンを押すとユーザー登録できます。
+DBに登録されるパスワードはハッシュ化されておらず平文で保存されます。
+
+## 今後の予定
+開発しやすいようにマニュアルを整備する予定。
