@@ -233,6 +233,39 @@ http://vma.isocked.com/#/dashboard
 ログイン画面でメールアドレスとパスワードを入力してRegisterボタンを押すとユーザー登録できます。  
 DBに登録されるパスワードはハッシュ化されておらず平文で保存されます。
 
+## どのように動いているか Vue.js→Flask→Vue.js
+vue.jsで構築したフロントエンドを使ったユーザーが入力したデータをbackendのFlaskで構築したAPIを叩くことでデータを受け渡して処理をしています。  
+例えば、トップページのログイン画面ですが、画面自体は  
+frontend/src/views/auth/Login.vue  
+https://github.com/geeorgey/vue_flask_template/blob/main/frontend/src/views/auth/Login.vue  
+で構築されています。  
+ログインボタンには　handleLogin　という関数が割り当てられており、同ファイルにある関数を呼び出しています。  
+https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed15ab6e4083f2/frontend/src/views/auth/Login.vue#L96  
+dispatch('login', this.formModel)  
+の部分でloginというメソッドを呼び出しています。loginがどこにあるかというとこちらです。  
+https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed15ab6e4083f2/frontend/src/store/modules/auth.js#L30  
+    return request({    
+      url: '/auth/login',    
+      method: 'post'  
+という部分がありますが、ここでFlaskを呼び出しています。  
+該当するコードはこちらです。  
+https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed15ab6e4083f2/backend/auth.py#L15  
+受け取ったusernameとpasswordをもとにユーザーテーブルを検索してマッチすれば200を返してログイン完了にするという形です。  
+return jsonify 部分でfrontendにデータを返しています。  
+Login.vueに戻りましょう。データを受け取るのはこの部分です。  
+https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed15ab6e4083f2/frontend/src/views/auth/Login.vue#L101  
+200が返ってきた場合は、dashboardに移動します。  
+400が返ってきた場合はログインに失敗した旨を返しています。
+
+### 開発に必要な知識
+Vue.jsについての知識が必要です。UI開発チームがこちらを担当します。  
+pythonを書く人はbackend側を作ってデータの処理を担当してください。  
+https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed15ab6e4083f2/backend/auth.py#L15  
+こちらに書いてあるようにrouteの設定をしてデータを受け取るためのエンドポイントを設定します。  
+フロントエンドチームは、エンドポイントにデータを投げます。  
+バックエンドチームは、受け取ったデータを使ってデータの処理をして、レスポンスを返します。  
+フロントエンドチームは、返ってきたレスポンスを使って、UIに変化をもたらしましょう。
+
 ### frontendを開発するには
 フロントエンドを更新する場合は  
 /frontend/src  
