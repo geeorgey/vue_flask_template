@@ -102,9 +102,33 @@ yarn build
 そうしないとおそらくビルドしても更新が反映されません。
 
 ## Herokuにデプロイする
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+デプロイ前に、必ずForkしてください。
+mainブランチから直接デプロイしても動きません。
 
-Heroku上にデプロイする場合はこちらのボタンからデプロイしてください。
+### やるべきこと
+Herokuにログインしたらアプリを作成してURLを取得しましょう。
+アプリ作成後に右上あたりに現れるOpen Appボタンを押すとURLがわかります。
+
+frontend/.env.development
+にかかれているVUE_APP_BASE_APIを先程取得したURLに変えます。
+
+次はターミナルで
+yarn install
+をしてパッケージのインストールを行ったあとに
+yarn build
+をして、distディレクトリの中身を更新して下さい。
+
+これが終わったら、ファイルを先程Forkしたリポジトリにアップします。
+git add frontend/.env.development
+git add dist
+git commit -m'Heroku用の調整'
+git push -u origin main
+(ブランチ名によりmainかどうかは分かりませんので適宜変更して下さい)
+
+これをやったら、Herokuの管理ページにあるDeployタブを開きます。
+自分のGithubアカウントとアプリ名で検索して設定しましょう。
+Deploy a GitHub branchのChoose a branch to deployからブランチを選択して
+Deploy Branchボタンを押すことで、変更が反映されます。
 
 ## Herokuに環境変数を設定する
 
@@ -115,12 +139,27 @@ FreeプランでOKです。
 ### 環境変数を設定する
 Settingsタブを開き、Reveal Config Varsボタンをクリック。
 環境変数欄にすでにDATABASE_URL が入っているのがわかると思います。
-その下に４つ追加します。
+その下に5つ追加します。
 Key　｜　Value
 ENV　｜　development
 FLASK_APP　｜　backend
 FLASK_DEBUG　｜　1
 VUE_APP_BASE_API　｜　ここには、右上にあるOpen App ボタンを押して開いたURLを入れてください。
+SQLALCHEMY_DATABASE_URI　｜　ここには、DATABASE_URLの中身を若干加工して入れます。
+postgres://ユーザー名:パスワード@Host名:5432/DB名
+となっていると思うのですが、冒頭にあるpostgresをpostgresqlに変更して
+postgresql://ユーザー名:パスワード@Host名:5432/DB名
+という形式にして入れて下さい。
+
+
+### DBをセットアップする
+右上にあるMoreボタンを押すと、Run consoleというメニューがあるのでそれを開きます。
+heroku runの横に bash と書かれた入力欄があるので、そこに
+flask db upgrade
+と入れて下さい。
+これでDBの初期設定は完了です。
+Open Appボタンからサイトを開けば、こちらと同様に見えるはずです。
+https://vueflasktestgeeorgey.herokuapp.com/#/
 
 ## 現時点で実装してある機能
 ログイン画面でメールアドレスとパスワードを入力してログインすることが可能です。
