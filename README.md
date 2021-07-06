@@ -10,16 +10,16 @@ Macでローカル開発することを前提に以下の文章は書かれて�
 READMEを上から実行していく事で、Herokuへのデプロイと、ローカルの開発環境が構築できるように書いてあります。  
 開発初心者向けに書いてありますので、分かっている部分については読み飛ばしてください。
 
-## Home brewをインストールする
+## MacにHome brewをインストールする
 https://brew.sh/index_ja  
 書いてあるコマンドをターミナルにコピペしてインストールしてください。
 
-## gitをインストールする
+## Macにgitをインストールする
 Home brewを使ってインストールします。  
 ターミナルで以下のコマンドを実行してインストールしてください。  
 brew install git
 
-## リポジトリをForkしましょう。
+## GithubでリポジトリをForkしましょう。
 やり方はこちらを参照：https://docs.github.com/ja/github/getting-started-with-github/quickstart/fork-a-repo  
 このプロジェクトを自分のGithubレポジトリにForkしてください。  
 注意：geeorgey/vue_flask_template のmainブランチから直接デプロイしても動きません。
@@ -28,7 +28,7 @@ brew install git
 Vue.jsからビルドする事でdistディレクトリが作られるのですが、ビルドの際にVUE_APP_BASE_APIという環境変数が読み込まれています。  
 これをこれから作るHerokuアプリのURLに変えないとうまく動きません。
 
-### ローカルにcloneしてください
+### ローカル環境(Mac)にリポジトリをcloneしてください
 Forkしたリポジトリをローカル環境にcloneしましょう。  
 ターミナルで、作業フォルダに移動しましょう。  
 cd ~/  
@@ -41,7 +41,7 @@ cd vue_flask_template
 ~/QA/vue_flask_template/  
 以下にファイルがすべてDLされます。
 
-### Herokuでアプリを作る
+## Herokuでアプリを作る
 https://heroku.com/  
 アカウントを作って、ログインしてください。  
 Herokuにログインしたらアプリを作成してURLを取得しましょう。  
@@ -49,7 +49,17 @@ https://dashboard.heroku.com/apps
 こちらのURLから、右上にあるNew>Create New Appを選択して、適当な名前でアプリを作ってください。  
 アプリ作成後に右上あたりに現れるOpen Appボタンを押すとURLがわかります。  
 
-### frontendのビルドの準備をする
+### Herokuとは？(気になる人向け)
+PaaSと言われるサービスの一つです。
+自分でWebサーバを立ち上げずとも、必要なサービスを組み合わせる事で各種アプリを動かすことができます。
+無料枠があるので、その範囲でやれることをやってみてください。
+Herokuの特徴として、Github からソースコードをデプロイすることができます。
+逆に、普通のWebサーバと違い、Heroku上のファイルを直接編集するということができません。
+必ずローカル環境もしくはGithub上に静的ファイルを生成し、それをデプロイする形で使います。
+プログラムでファイルを生成してHeroku上に保存するという使い方はできないので注意してください。
+動的に生成されるデータは必ずデータベースに格納する必要があります。
+
+## ローカル環境(Mac)で、frontendのビルドの準備をする
 frontend/.env.development  
 にかかれているVUE_APP_BASE_APIを先程取得したURLに変えます。
 
