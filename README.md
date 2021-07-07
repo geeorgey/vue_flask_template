@@ -255,7 +255,11 @@ return jsonify 部分でfrontendにデータを返しています。
 Login.vueに戻りましょう。データを受け取るのはこの部分です。  
 https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed15ab6e4083f2/frontend/src/views/auth/Login.vue#L101  
 200が返ってきた場合は、dashboardに移動します。  
-400が返ってきた場合はログインに失敗した旨を返しています。
+400が返ってきた場合はログインに失敗した旨を返しています。  
+
+フロントエンドからバックエンドにデータを投げて、処理したものを受け取る流れについて  
+こちらに詳細を記していますので、興味がある場合は参照してみて下さい。  
+https://qiita.com/geeorgey/items/ea60afe0c44a5f9db483
 
 ### 開発に必要な知識
 Vue.jsについての知識が必要です。UI開発チームがこちらを担当します。  
@@ -273,9 +277,6 @@ https://github.com/geeorgey/vue_flask_template/blob/cc05a7b367638c8aef55964620ed
 注意：ビルド後にWebブラウザでアクセスしたときは、スーパーリロードしてブラウザキャッシュを消してください。  
 そうしないとおそらくビルドしても更新が反映されません。
 
-### フロントエンドからバックエンドにデータを投げて、処理したものを受け取る流れについて
-こちらに詳細を記していますので、興味がある場合は参照してみて下さい。
-https://qiita.com/geeorgey/items/ea60afe0c44a5f9db483
 
 ## 今後の予定
 開発しやすいようにマニュアルを整備する予定。
