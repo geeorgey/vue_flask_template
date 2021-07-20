@@ -11,6 +11,11 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(1000))
     password = db.Column(db.String(1000))
 
+class ToDo(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    name = db.Column(db.String(1000))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
 def init_db(app):
     db.init_app(app)
     Migrate(app, db)

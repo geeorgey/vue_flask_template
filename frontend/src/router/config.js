@@ -55,6 +55,15 @@ export const protectedRoute = [
     redirect: '/dashboard',
     children: [
       {
+        path: '/todo',
+        name: 'todo',
+        meta: {
+          title: 'todo',
+          icon: 'mdi-file-tree',
+        },
+        component: () => import('@/views/todo/ToDo.vue'),
+      },
+      {
         path: '/dashboard',
         name: 'dashboard',
         meta: {

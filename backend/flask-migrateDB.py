@@ -27,3 +27,10 @@ class User(db.Model):
     # この関数は、インタープリタ(コンソール)からこのクラス(からできたインスタンス)を読んだ際に、どのように表示されるかを定義している。ここではusernameを表示させている。
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+class ToDo(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    name = db.Column(db.String(1000))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    def __repr__(self):
+        return '<ToDo {}>'.format(self.name)

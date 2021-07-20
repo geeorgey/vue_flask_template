@@ -23,6 +23,7 @@ def login():
         return jsonify(
             access_token='test'
             ,expires_in=3600
+            ,user_id=user.id
             ), 200
     else:
         return jsonify({"message": "メールアドレスとパスワードの組み合わせが間違っています。"}), 400

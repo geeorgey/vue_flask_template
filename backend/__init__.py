@@ -4,13 +4,12 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from .config import Config
-from .models import db, init_db
+from .models import db, init_db, User
 
 app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
 jwt = JWTManager(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
-
 
 app.config.from_object(Config)
 migrate = Migrate(app, db) #https://qiita.com/svfreerider/items/50c68252c2f119583a28
@@ -19,8 +18,6 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
-
-from .models import User
 
 @login_manager.user_loader
 def load_user(user_id):

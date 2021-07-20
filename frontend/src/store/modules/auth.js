@@ -16,14 +16,15 @@ const state = {
   avatar: null,
   userColor: '#2196f3',
   status: 'online',
+  user_id: null,
 }
 const getters = {
   getAccessToken: (state) => {
     return state.access_token
   },
   getAvatar: (state) => state.avatar,
-
   getUsername: (state) => state.username,
+  getUserId: (state) => state.user_id,
   getUserStatus: (state) => state.status,
 }
 const actions = {
@@ -36,8 +37,10 @@ const actions = {
         password,
       },
     }).then((resp) => {
+      console.log('after login')
+      //console.log(resp)
       commit('SET_LOGIN', resp)
-      dispatch('fetchProfile',{username: username})
+      dispatch('fetchProfile', { username: username })
     })
   },
   register({ commit, dispatch }, data) {
@@ -47,7 +50,7 @@ const actions = {
       data: data,
     }).then((resp) => {
       commit('SET_LOGIN', resp)
-      dispatch('fetchProfile',{username: username})
+      dispatch('fetchProfile',{ username: username })
       return resp
     })
   },
@@ -71,9 +74,10 @@ const actions = {
   },
 }
 const mutations = {
-  SET_LOGIN(state, { access_token, expires_in }) {
+  SET_LOGIN(state, { access_token, expires_in, user_id }) {
     state.access_token = access_token
     state.expires_in = expires_in
+    state.user_id = user_id
   },
   SET_ACCESS_TOKEN(state, token) {
     state.access_token = token
