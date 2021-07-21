@@ -16,17 +16,20 @@ auth = Blueprint('auth', __name__)
 def login():
     email = request.json.get("username", None)
     password = request.json.get("password", None)
-    user = User.query.filter_by(email=email,password=password).first()
+    user = User.select_by_email(email)
     print('/auth/login')
     print(user)
-    if user:
+    if user and user.check_password(password):
+        """ ユーザに対してログイン処理を施す """
         return jsonify(
             access_token='test'
             ,expires_in=3600
             ,user_id=user.id
             ), 200
-    else:
+    elif user:
         return jsonify({"message": "メールアドレスとパスワードの組み合わせが間違っています。"}), 400
+    else:
+        return jsonify({"message": "存在しないユーザです"}), 400
 
 @auth.route("/auth/register", methods=["POST"])
 def register():
@@ -43,8 +46,11 @@ def register():
     user = User.query.filter_by(email=email).first()
     if user:
         return jsonify(
-            access_token='test'
-            ,expires_in=3600
+            {
+                "message": "登録完了しました。ログインしてください。",
+                "access_token": "test",
+                "expires_in": 3600
+            }
             ), 200
     else:
         return jsonify({"message": "メールアドレスとパスワードの組み合わせが間違っている、もしくはリバネスIDが存在しません。"}), 400
