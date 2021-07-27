@@ -59,6 +59,9 @@ Herokuの特徴として、Github からソースコードをデプロイする�
 プログラムでファイルを生成してHeroku上に保存するという使い方はできないので注意してください。
 動的に生成されるデータは必ずデータベースに格納する必要があります。
 
+以下について詳細はこちらをご覧ください  
+https://qiita.com/geeorgey/items/b080617f5332ab7255c4  
+
 ## ローカル環境(Mac)で、frontendのビルドの準備をする
 frontend/.env.development  
 にかかれているVUE_APP_BASE_APIがビルドに使われます。  
