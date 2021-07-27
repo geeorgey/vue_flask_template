@@ -61,13 +61,18 @@ Herokuの特徴として、Github からソースコードをデプロイする�
 
 ## ローカル環境(Mac)で、frontendのビルドの準備をする
 frontend/.env.development  
-にかかれているVUE_APP_BASE_APIを先程取得したURLに変えます。
+にかかれているVUE_APP_BASE_APIがビルドに使われます。  
+VUE_APP_BASE_API="http://localhost:5000"
 
 次はターミナルから、frontendディレクトリに移りましょう。  
 cd frontend  
 この時点での場所は  
 ~/QA/vue_flask_template/frontend/  
 です。  
+
+## 同様にローカル環境でHeroku用のfrontendのビルドの準備をする
+frontend/.env.production  
+にかかれているVUE_APP_BASE_APIを先程取得したURLに変えます。  
 
 以下でフロントエンド側パッケージ管理システムであるyarnのインストールを行います
 
@@ -90,6 +95,11 @@ yarn install
 
 ### frontendのビルド
 yarn build  
+こうすることでルートディレクトリに dist_dev というディレクトリが作成されます。  
+VUE_APP_BASE_APIが組み込まれた状態でビルドされます。
+
+### Heroku用のfrontendのビルド
+yarn build:prod  
 こうすることでルートディレクトリに dist というディレクトリが作成されます。  
 VUE_APP_BASE_APIが組み込まれた状態でビルドされます。
 
@@ -97,7 +107,7 @@ VUE_APP_BASE_APIが組み込まれた状態でビルドされます。
 これが終わったら、ファイルを先程Forkしたリポジトリにアップします。  
 作業ディレクトリはルートディレクトリの ~/QA です。  
 cd ~/QA  
-git add frontend/.env.development  
+git add frontend/.env.production  
 git add dist  
 git commit -m'Heroku用の調整'  
 git push -u origin main  
@@ -119,18 +129,19 @@ FreeプランでOKです。
 ### 環境変数を設定する
 Settingsタブを開き、Reveal Config Varsボタンをクリック。  
 環境変数欄にすでにDATABASE_URL が入っているのがわかると思います。  
-その下に5つ追加します。  
+その下に7つ追加します。  
 Key　｜　Value  
 ENV　｜　development  
 FLASK_APP　｜　backend  
 FLASK_DEBUG　｜　1  
+STATIC_FOLDER_PATH　｜ ../dist/static
+TEMPLATE_FOLDER_PATH　｜　../dist
 VUE_APP_BASE_API　｜　ここには、右上にあるOpen App ボタンを押して開いたURLを入れてください。  
 SQLALCHEMY_DATABASE_URI　｜　ここには、DATABASE_URLの中身を若干加工して入れます。  
 postgres://ユーザー名:パスワード@Host名:5432/DB名  
 となっていると思うのですが、冒頭にあるpostgresをpostgresqlに変更して  
 postgresql://ユーザー名:パスワード@Host名:5432/DB名  
 という形式にして入れて下さい。
-
 
 ### DBをセットアップする
 Heroku管理画面の右上にあるMoreボタンを押すと、Run consoleというメニューがあるのでそれを開きます。  
