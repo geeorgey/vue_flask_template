@@ -15,3 +15,10 @@ yarn-error.log*
 # requirements.txtがある場合はPipfileがあるとHerokuがうまく動かない
 Pipfile
 Pipfile.lock
+
+__pycache__/
+__pycache__
+*.py[cod]
+*$py.class
+
+dist_dev
