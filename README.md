@@ -1,7 +1,7 @@
 ## flask-vue.js テンプレート
 フロントエンド vue.js  
 バックエンド Flask  
-Heroku上で稼働するWebアプリのテンプレートです。
+Heroku上にデプロイして稼働させるWebアプリのテンプレートです。
 
 ## 関連リンク
 - [pythonを使ってリアクティブなWebアプリをお手軽に1分で作りたい](https://qiita.com/geeorgey/items/ace37bd92841c9d1a378)
