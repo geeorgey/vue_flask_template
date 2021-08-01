@@ -2,5 +2,5 @@
   "name": "vue_flask_template",
   "description": "vue.js と flaskで作るWebアプリケーションのテンプレートです",
   "repository": "https://github.com/geeorgey/vue_flask_template",
-  "keywords": ["node", "express", "static"]
+  "keywords": ["Vue.js", "Flask", "Python3", "Heroku"]
 }
