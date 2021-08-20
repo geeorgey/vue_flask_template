@@ -5,8 +5,9 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from .config import Config
 from .models import db, init_db, User
+import os
 
-app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
+app = Flask(__name__, static_folder=os.environ["STATIC_FOLDER_PATH"], template_folder=os.environ["TEMPLATE_FOLDER_PATH"])
 jwt = JWTManager(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -31,3 +32,7 @@ app.register_blueprint(auth_blueprint)
 # blueprint for non-auth parts of app
 from .main import main as main_blueprint
 app.register_blueprint(main_blueprint)
+
+# blueprint for bolt parts of app
+from .bolt import bolt as bolt_blueprint
+app.register_blueprint(bolt_blueprint)

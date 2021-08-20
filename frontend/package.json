@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "cross-env NODE_ENV=development vue-cli-service build --mode development --dest ../dist",
+    "build": "cross-env NODE_ENV=development vue-cli-service build --mode development --dest ../dist_dev",
+    "build:prod": "cross-env NODE_ENV=production vue-cli-service build --mode production --dest ../dist",
     "lint": "vue-cli-service lint",
     "deploy": "aliyun-oss-deploy -p ./dist",
     "eslint-fix": "eslint src/**/**/*.vue --fix",
