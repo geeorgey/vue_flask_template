@@ -13,6 +13,7 @@ from slack_sdk.oauth.installation_store.sqlalchemy import SQLAlchemyInstallation
 from slack_sdk.oauth.state_store.sqlalchemy import SQLAlchemyOAuthStateStore
 from slack_bolt.oauth.callback_options import CallbackOptions, SuccessArgs, FailureArgs
 from slack_bolt.response import BoltResponse
+from slack_sdk.oauth.installation_store.installation_store import InstallationStore
 
 import os
 
@@ -52,6 +53,7 @@ bolt_app = App(
     logger=logger,
     signing_secret=os.environ.get("SIGNING_SECRET"),
     installation_store=installation_store,
+    raise_error_for_unhandled_request=True,
     oauth_settings=OAuthSettings(
         client_id=client_id,
         client_secret=client_secret,
@@ -60,6 +62,7 @@ bolt_app = App(
         user_scopes=os.environ.get("SLACK_USER_SCOPES"),
     ),
 )
+bolt_app.enable_token_revocation_listeners()
 
 
 @bolt_app.event("app_home_opened")
@@ -70,6 +73,15 @@ def app_home_opened(client, event, body, logger):
 def hello(body, say, logger):
     logger.info(body)
     say("What's up?")
+
+@bolt_app.error
+def handle_errors(error):
+    if isinstance(error, BoltUnhandledRequestError):
+        # You may want to have debug/info logging here
+        return BoltResponse(status=200, body="")
+    else:
+        # other error patterns
+        return BoltResponse(status=500, body="Something wrong")
 
 handler = SlackRequestHandler(bolt_app)
 
