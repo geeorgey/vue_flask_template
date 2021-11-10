@@ -325,12 +325,12 @@ def create_feedback_blocks(header_text,msg,private_metadata,params,target_locale
 
 @bolt_app.action("send_dm_to_users")
 def send_dm_to_users(ack, body, logger, client, view):
-    print('send_dm_to_users ■□■□■□■□■□■□■□■□■□■□■□')
+    print('send_dm_to_users ■□■□■□■□■□■□■□■□■□■□■□ ')
     ack()
     local_session = SESSION()
     try:
         userinfo = client.users_info(
-            user=body['user_id'],
+            user=body['user']['id'],
             include_locale=True
         )
     except SlackApiError as e:
