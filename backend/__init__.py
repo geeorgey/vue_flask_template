@@ -36,3 +36,7 @@ app.register_blueprint(main_blueprint)
 # blueprint for bolt parts of app
 from .bolt import bolt as bolt_blueprint
 app.register_blueprint(bolt_blueprint)
+
+# blueprint for feedback parts of app
+from .feedback import feedback as feedback_blueprint
+app.register_blueprint(feedback_blueprint)

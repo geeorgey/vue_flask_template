@@ -7,6 +7,10 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import generate_password_hash, check_password_hash
+from slack_sdk.oauth.installation_store.models.bot import Bot
+from slack_sdk.oauth.installation_store.models.installation import Installation
+from sqlalchemy.types import Float
+from sqlalchemy.types import TIMESTAMP
 
 
 # 実行されるファイル(test_flask-migrate.py)の置き場所をbasedirに保存
@@ -37,3 +41,60 @@ class ToDo(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     def __repr__(self):
         return '<ToDo {}>'.format(self.name)
+
+class InstalledWorkSpace(db.Model):
+    id = db.Column(db.Integer, primary_key=True) 
+    slack_ws_id = db.Column(db.String(100))
+    slack_ws_name = db.Column(db.String(100))
+    enterprise_id = db.Column(db.String)
+    user_num = db.Column(db.Integer, default=0)
+    plan = db.Column(db.String(2000))
+    free_expired_at = db.Column(db.DateTime) #試用期間 登録の翌月末に設定すること
+    plan_expired_at = db.Column(db.DateTime) #プラン期限
+    is_active = db.Column(db.Boolean, default=True)
+    installed_at = db.Column(db.DateTime)
+    channel_joined_at = db.Column(db.DateTime)
+    def __repr__(self):
+        return '<InstalledWorkSpace {}>'.format(self.slack_ws_name)
+
+
+class SlackInstallations(Installation, db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    client_id = db.Column(db.String, nullable=False)
+    app_id = db.Column(db.String, nullable=False)
+    enterprise_id = db.Column(db.String)
+    enterprise_name = db.Column(db.String)
+    enterprise_url = db.Column(db.String)
+    team_id = db.Column(db.String)
+    team_name = db.Column(db.String)
+    bot_token = db.Column(db.String)
+    bot_id = db.Column(db.String)
+    bot_user_id = db.Column(db.String)
+    bot_scopes = db.Column(db.String)
+    user_id = db.Column(db.String, nullable=False)
+    user_email = db.Column(db.String)
+    user_token = db.Column(db.String)
+    user_scopes = db.Column(db.String)
+    incoming_webhook_url = db.Column(db.String)
+    incoming_webhook_channel = db.Column(db.String)
+    incoming_webhook_channel_id = db.Column(db.String)
+    incoming_webhook_configuration_url = db.Column(db.String)
+    is_enterprise_install = db.Column(db.Boolean, default=False, nullable=False)
+    token_type = db.Column(db.String)
+    bot_refresh_token = db.Column(db.String(200))
+    bot_token_expires_at = db.Column(db.DateTime)
+    user_refresh_token = db.Column(db.String(200))
+    user_token_expires_at = db.Column(db.DateTime)
+    def __repr__(self):
+        return '<SlackInstallations {}>'.format(self.id)
+
+class SlackBots(Bot, db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    team_id = db.Column(db.String)
+    enterprise_id = db.Column(db.String)
+    bot_token = db.Column(db.String(200))
+    bot_refresh_token = db.Column(db.String(200))
+    bot_token_expires_at = db.Column(db.DateTime)  
+    bot_id = db.Column(db.String(200))
+    def __repr__(self):
+        return '<SlackBots {}>'.format(self.id)
