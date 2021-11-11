@@ -27,8 +27,8 @@ python-dotenv==0.18.0
 python-editor==1.0.4
 pytz==2021.1
 six==1.16.0
-slack-bolt==1.8.0
-slack-sdk==3.9.1
+slack-bolt>=1.8.0
+slack-sdk>=3.9.1
 SQLAlchemy==1.4.20
 SQLAlchemy-Utils==0.37.8
 typing-extensions==3.10.0.0
