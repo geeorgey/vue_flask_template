@@ -298,8 +298,7 @@ client_id, client_secret, signing_secret = (
     os.environ["SLACK_CLIENT_SECRET"],
     os.environ["SLACK_SIGNING_SECRET"],
 )
-database_url = os.environ.get("DATABASE_URL")
-print(database_url)
+database_url = os.environ.get("SQLALCHEMY_DATABASE_URI")
 engine: Engine = sqlalchemy.create_engine(database_url)
 SESSION = sessionmaker(engine)
 installation_store = SQLAlchemyInstallationStore(
