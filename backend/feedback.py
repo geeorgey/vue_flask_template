@@ -32,22 +32,42 @@ from dateutil.relativedelta import relativedelta
 import calendar
 from pytz import timezone
 
-
 @bolt_app.command(os.environ["SLACK_FEEDBACK_COMMAND"])
 def SLACK_FEEDBACK_COMMAND(ack,client, body, say, logger, view):
     print('SLACK_FEEDBACK_COMMAND')
+    ack()
+    start_Feedback(client, body, logger)
+
+@bolt_app.action("contact_us")
+def contact_us(ack, body, logger, client, view):
+    print('contact_us ■□■□■□■□■□■□■□■□■□■□■□')
+    ack()
+    try:
+        start_Feedback(client, body, logger)
+    except Exception as e:
+        print(e)
+
+def start_Feedback(client, body, logger):
+    print('start_Feedback')
     """利用する変数一覧
+    #チャンネルから呼び出される場合
     channel_id: body['channel_id']
     locale: userinfo['user']['locale']
     """
-    ack()
+    user_id = Null
+    if body.get('user_id') is not None:#チャンネルから呼び出される場合
+        user_id = body.get('user_id')
+    if body.get('user') is not None and body.get('user').get('id') is not None:#ホーム画面から呼び出される場合
+        user_id = body.get('user').get('id') 
     try:
         userinfo = client.users_info(
-            user=body['user_id'],
+            user=user_id,
             include_locale=True
         )
     except SlackApiError as e:
         print("Error fetching conversations: {}".format(e))
+
+
     """
     print(userinfo)
     print(userinfo['user']['profile']['email'])
@@ -59,6 +79,13 @@ def SLACK_FEEDBACK_COMMAND(ack,client, body, say, logger, view):
     print(userinfo['user']['profile']['image_512'])
     """
     locale = userinfo['user']['locale']
+
+    channel_id = Null
+    if body.get('channel_id') is not None: #チャンネルからコマンドで呼び出す場合
+        channel_id = body['channel_id']
+        print('channel_id: ' + body['channel_id'])
+    else:#ホーム画面から呼び出す場合はDMで返すのでuseridを使う
+        channel_id = userinfo['user']['id']
 
     if locale == 'ja-JP':
         text_title = os.environ["APP_NAME"] + "へのフィードバック"
@@ -109,7 +136,7 @@ def SLACK_FEEDBACK_COMMAND(ack,client, body, say, logger, view):
         "image_512": userinfo['user']['profile']['image_192'],
         "is_admin": userinfo['user']['is_admin'],
         "is_owner": userinfo['user']['is_owner'],
-        "channel_id": body['channel_id'],
+        "channel_id": channel_id,
         "locale": userinfo['user']['locale']
     }
 

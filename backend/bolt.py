@@ -8,6 +8,7 @@ from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+from slack_bolt.error import BoltUnhandledRequestError
 from slack_bolt.oauth.oauth_settings import OAuthSettings
 from slack_sdk.oauth.installation_store.sqlalchemy import SQLAlchemyInstallationStore
 from slack_sdk.oauth.state_store.sqlalchemy import SQLAlchemyOAuthStateStore
@@ -298,6 +299,7 @@ client_id, client_secret, signing_secret = (
     os.environ["SLACK_SIGNING_SECRET"],
 )
 database_url = os.environ.get("DATABASE_URL")
+print(database_url)
 engine: Engine = sqlalchemy.create_engine(database_url)
 SESSION = sessionmaker(engine)
 installation_store = SQLAlchemyInstallationStore(
@@ -363,30 +365,44 @@ def app_home_opened(client, event, body, logger, view):
     for user_id in admin_user_ids:
         if user_id == event.get('user'):
             is_app_owner = True
+
+    if locale == 'ja-JP':
+        text_menu = "ユーザー通知メニュー"
+        dm_menu = "DM送信メニュー"
+        text_home_message = "ホーム画面に掲載するメッセージ"
+        menu_text = "*各種設定*"
+        inq_text = "お問い合わせ"
+    else:
+        text_menu = "User Notification Menu"
+        dm_menu = "Send DM menu"
+        text_home_message = "Message to be posted on the home screen"
+        menu_text = "*Settings*"
+        inq_text = "Contact"
+
     if is_app_owner == True:
         blocks = [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "ユーザー通知メニュー"
+                    "text": text_menu
                 },
                 "accessory": {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "DM送信メニュー",
+                        "text": dm_menu,
                         "emoji": True
                     },
                     "value": "send_dm_to_users",
                     "action_id": "send_dm_to_users"
                 }
-            }
+            },
+            {
+                "type": "divider"
+            },
         ]
-    if locale == 'ja-JP':
-        text_home_message = "ホーム画面に掲載するメッセージ"
-    else:
-        text_home_message = "Message to be posted on the home screen"
+
     blocks_add_section = [
 		{
 			"type": "section",
@@ -399,6 +415,33 @@ def app_home_opened(client, event, body, logger, view):
 
     blocks = blocks + blocks_add_section
     print("-aa-")
+
+    blocks_contact = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": menu_text,
+            }
+        },
+        {
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "emoji": True,
+                        "text": inq_text
+                    },
+                    "style": "primary",
+                    "value": "contact_us",
+                    "action_id": "contact_us"
+                },
+            ]
+        },        
+    ]
+    blocks = blocks + blocks_contact
     print(blocks)
 
     client.views_publish(
