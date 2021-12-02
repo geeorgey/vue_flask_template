@@ -43,7 +43,7 @@ def fire_and_forget(f): #https://rinoguchi.net/2020/11/python-asyncio.html
         return get_or_create_eventloop().run_in_executor(None, f, *args, *kwargs)
     return wrapped
 
-#すべての公開チャンネルにjoin
+#すべての公開チャンネルにjoinする
 @fire_and_forget
 def channels_join(client):
     is_repeat = True
