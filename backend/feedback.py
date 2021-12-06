@@ -448,7 +448,7 @@ def dm_for_installed_users_confirm(ack, body, payload, client, view, logger):
     print('start dm_for_installed_users_confirm')
     try:
         userinfo = client.users_info(
-            user=body['user_id'],
+            user=body['user']['id'],
             include_locale=True
         )
     except SlackApiError as e:
