@@ -545,6 +545,30 @@ def dm_for_installed_users_send(ack, body, payload, client, view, logger):
     finally:
         print('finish find slack_installations')
 
+    owner_client = WebClient(token=os.environ.get("APP_OWNER_TOKEN"))
+    try:
+        sender_userinfo = owner_client.users_info(
+            user=os.environ.get("APP_OWNER_ID"),
+            include_locale=True
+        )
+    except SlackApiError as e:
+        print("Error fetching conversations: {}".format(e))
+    #送信者のデータ
+    private_metadata = {
+        "email": sender_userinfo['user']['profile']['email'],
+        "user_id": sender_userinfo['user']['id'],
+        "team_id": sender_userinfo['user']['team_id'],
+        "real_name": sender_userinfo['user']['real_name'],
+        "tz": sender_userinfo['user']['tz'],
+        "tz_label": sender_userinfo['user']['tz_label'],
+        "image_512": sender_userinfo['user']['profile']['image_192'],
+        "is_admin": sender_userinfo['user']['is_admin'],
+        "is_owner": sender_userinfo['user']['is_owner'],
+        "locale": sender_userinfo['user']['locale'],
+        "team_name": os.environ.get("APP_OWNER_TEAM_NAME")
+    }
+
+
     for slack_installation in slack_installations:
         print("ループ" + slack_installation.user_email)
         print(vars(slack_installation))
@@ -556,19 +580,7 @@ def dm_for_installed_users_send(ack, body, payload, client, view, logger):
             )
         except SlackApiError as e:
             print("Error fetching conversations: {}".format(e))
-        private_metadata = {
-            "email": userinfo['user']['profile']['email'],
-            "user_id": userinfo['user']['id'],
-            "team_id": userinfo['user']['team_id'],
-            "real_name": userinfo['user']['real_name'],
-            "tz": userinfo['user']['tz'],
-            "tz_label": userinfo['user']['tz_label'],
-            "image_512": userinfo['user']['profile']['image_192'],
-            "is_admin": userinfo['user']['is_admin'],
-            "is_owner": userinfo['user']['is_owner'],
-            "locale": userinfo['user']['locale'],
-            "team_name": slack_installation.team_name
-        }
+
         locale = userinfo['user']['locale']
         if locale == 'ja-JP':
             header_text = ":mega:" + os.environ.get("APP_NAME") + " よりお知らせ"
