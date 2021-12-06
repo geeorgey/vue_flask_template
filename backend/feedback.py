@@ -571,11 +571,11 @@ def dm_for_installed_users_send(ack, body, payload, client, view, logger):
         }
         locale = userinfo['user']['locale']
         if locale == 'ja-JP':
-            header_text = ":mega: TimeLine for Slack よりお知らせ"
+            header_text = ":mega:" + os.environ.get("APP_NAME") + " よりお知らせ"
             label = "返信はこちらから"
             text_button = "送信する"
         else:
-            header_text = ":mega: Announcement from TimeLine for Slack"
+            header_text = ":mega: Announcement from " + os.environ.get("APP_NAME")
             label = "Fill out the reply here."
             text_button = "Send"
 
